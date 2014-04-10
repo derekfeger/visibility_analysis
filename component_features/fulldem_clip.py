@@ -11,7 +11,7 @@ full_dem = "E:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.ti
 buffersize = "1000 Feet"
 
 # Buffers input point features to specified buffer size
-arcpy.Buffer_analysis(input_points, "E:\\independent_study\\visibility_analysis\\output_files\\va_rALL_buf", buffersize)
+arcpy.Buffer_analysis(input_points, "E:\\independent_study\\visibility_analysis\\output_files\\va_rALL_buf.shp", buffersize)
 
 # Clips full DEM to extent of buffer output_file
-arcpy.Clip_management(full_dem, "#", "E:\\independent_study\\visibility_analysis\\dem_files\\clipped_dem.tif", "E:\\independent_study\\visibility_analysis\\output_files\\va_rALL_buf", "#", "ClippingGeometry")
+arcpy.Clip_management(full_dem, "#", "E:\\independent_study\\visibility_analysis\\dem_files\\clipped_dem.tif", "E:\\independent_study\\visibility_analysis\\output_files\\va_rALL_buf.shp", "#", "ClippingGeometry")
