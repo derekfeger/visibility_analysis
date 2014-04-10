@@ -5,14 +5,18 @@ import os.path
 arcpy.env.workspace = "E:\\independent_study\\topo_efficiency"
 
 # User Inputs (Ideally would be definable parameters instead of having to code in themselves)
-	# Should include prepare_table, a buffer size, input point features, dem file, csv output location
+	# Should include prepare_table
+input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
+full_dem = "E:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
+buffersize = "1000 Feet"
 csv_output_file = "E:\\independent_study\\topo_efficiency\\topo_efficiency.csv"
 
-# Set global variables
+# Set global variables, variables for produced files
 recordnumber = 0
 prepare_table = True
 vispix = 0
 nvispix = 0
+subset_dem = "E:\\independent_study\\visibility_analysis\\dem_files\\clipped_dem.tif"
 
 # Set local functions
 def table_prep(tablefile):
@@ -31,14 +35,14 @@ else:
 for recordnumber in range(0,1):
 
 	# Select a record and create a new feature for just that billboard
-	arcpy.MakeFeatureLayer_management(os.path.join('E:\\', 'independent_study', 'Billboardsdata_pghcityplanning', 'LamarSigns.shp'), "bb_r%r" % recordnumber) 
+	arcpy.MakeFeatureLayer_management(input_points, "bb_r%r" % recordnumber) 
 	arcpy.SelectLayerByAttribute_management("bb_r%d" % recordnumber, "NEW_SELECTION", ' "FID" = %d ' % recordnumber)
 	arcpy.CopyFeatures_management("bb_r%r" % recordnumber, "E:\\independent_study\\topo_efficiency\\bboard_points\\bb_r%r" % recordnumber)
 
 	# Create a 1000ft buffer around current billboard
-	arcpy.Buffer_analysis("E:\\independent_study\\topo_efficiency\\bboard_points\\bb_r%r.shp" % recordnumber, "E:\\independent_study\\topo_efficiency\\bboard_buffer\\bb_r%rbuf" % recordnumber, "1000 Feet")
+	arcpy.Buffer_analysis("E:\\independent_study\\topo_efficiency\\bboard_points\\bb_r%r.shp" % recordnumber, "E:\\independent_study\\topo_efficiency\\bboard_buffer\\bb_r%rbuf" % recordnumber, buffersize)
 
-	# Clip the full DEM to the individual billboard buffer
+	# Clip the subset DEM to the individual billboard buffer
 	arcpy.Clip_management("E:\\independent_study\\topo_efficiency\\fullclip_test", "#", "E:\\independent_study\\topo_efficiency\\bboard_clip\\bb_r%rclip" % recordnumber, "E:\\independent_study\\topo_efficiency\\bboard_buffer\\bb_r%rbuf.shp" % recordnumber, "#", "ClippingGeometry")
 
 	# Retrieves 3D analyst license, then creates a viewshed within individual DEM, then returns license to license manager
