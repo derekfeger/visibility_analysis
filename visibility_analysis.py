@@ -2,17 +2,21 @@ import arcpy
 import os.path
 
 # Set the workspace
-arcpy.env.workspace = "E:\\independent_study\\visibility_analysis"
+arcpy.env.workspace = "F:\\independent_study\\visibility_analysis"
 
 # User Inputs (Ideally would be definable parameters instead of having to code in themselves)
-	# Should include prepare_table, a buffer size, input point features, dem file, csv output location
-csv_output_file = "E:\\independent_study\\visibility_analysis\\visibility_analysis.csv"
+	# Should include prepare_table
+input_points = "F:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
+full_dem = "F:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
+buffersize = "1000 Feet"
+csv_output_file = "F:\\independent_study\\visibility_analysis\\visibility_analysis.csv"
 
-# Set global variables
+# Set global variables, variables for produced files
 recordnumber = 0
 prepare_table = True
 vispix = 0
 nvispix = 0
+subset_dem = "F:\\independent_study\\visibility_analysis\\dem_files\\clipped_dem.tif"
 
 # Set local functions
 def table_prep(tablefile):
@@ -31,15 +35,15 @@ else:
 for recordnumber in range(0,1):
 
 	# Select a record and create a new feature for just that billboard
-	arcpy.MakeFeatureLayer_management(os.path.join('E:\\', 'independent_study', 'Billboardsdata_pghcityplanning', 'LamarSigns.shp'), "bb_r%r" % recordnumber) 
+	arcpy.MakeFeatureLayer_management(input_points, "bb_r%r" % recordnumber) 
 	arcpy.SelectLayerByAttribute_management("bb_r%d" % recordnumber, "NEW_SELECTION", ' "FID" = %d ' % recordnumber)
 	arcpy.CopyFeatures_management("bb_r%r" % recordnumber, "E:\\independent_study\\visibility_analysis\\bboard_points\\bb_r%r" % recordnumber)
 
 	# Create a 1000ft buffer around current billboard
-	arcpy.Buffer_analysis("E:\\independent_study\\visibility_analysis\\bboard_points\\bb_r%r.shp" % recordnumber, "E:\\independent_study\\visibility_analysis\\bboard_buffer\\bb_r%rbuf" % recordnumber, "1000 Feet")
+	arcpy.Buffer_analysis("E:\\independent_study\\visibility_analysis\\bboard_points\\bb_r%r.shp" % recordnumber, "E:\\independent_study\\visibility_analysis\\bboard_buffer\\bb_r%rbuf" % recordnumber, buffersize)
 
-	# Clip the full DEM to the individual billboard buffer
-	arcpy.Clip_management("E:\\independent_study\\visibility_analysis\\fullclip_test", "#", "E:\\independent_study\\visibility_analysis\\bboard_clip\\bb_r%rclip" % recordnumber, "E:\\independent_study\\visibility_analysis\\bboard_buffer\\bb_r%rbuf.shp" % recordnumber, "#", "ClippingGeometry")
+	# Clip the subset DEM to the individual billboard buffer
+	arcpy.Clip_management(subset_dem, "#", "E:\\independent_study\\visibility_analysis\\bboard_clip\\bb_r%rclip" % recordnumber, "E:\\independent_study\\visibility_analysis\\bboard_buffer\\bb_r%rbuf.shp" % recordnumber, "#", "ClippingGeometry")
 
 	# Retrieves 3D analyst license, then creates a viewshed within individual DEM, then returns license to license manager
 	arcpy.CheckOutExtension("3D")
@@ -58,7 +62,7 @@ for recordnumber in range(0,1):
 	# Calculates percent visibility at this record location, converts the quotient to a float, and writes results to a csv file.
 	percent_visibility = float(vispix) / (nvispix + vispix)
 	append_to_csv = open(csv_output_file, 'a')
-	append_to_csv.write("%d,%f,%f,%f\n" % (recordnumber, vispix, nvispix, visibility_analysis)) 
+	append_to_csv.write("%d,%f,%f,%f\n" % (recordnumber, vispix, nvispix, percent_visibility)) 
 	append_to_csv.close()
 
 	# Resets variables vispix and nvispix
