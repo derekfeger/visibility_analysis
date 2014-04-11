@@ -19,8 +19,15 @@ nvispix = 0
 subset_dem = "F:\\independent_study\\visibility_analysis\\dem_files\\clipped_dem.tif"
 full_buffer = "F:\\independent_study\\visibility_analysis\\output_files\\va_rALL_buf.shp"
 
+# Set local functions
+def extract_subsetdem:
+	outmask = arcpy.ExtractByMask(full_dem, full_buffer)
+	outmask.save(subset_dem)
+
 # Buffers input point features to specified buffer size
 arcpy.Buffer_analysis(input_points, full_buffer, buffersize)
 
-# Clips full DEM to extent of buffer output_file
-arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "#", "ClippingGeometry")
+# Retrieves Spatial Analyst licence, extracts portions of the full_dem covered by full_buffer, then returns Spatial Analyst licence to licence manager
+arcpy.CheckOutExtension("Spatial")
+extract_subsetdem()
+arcpy.CheckInExtension("Spatial")
