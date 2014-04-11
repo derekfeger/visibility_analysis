@@ -6,7 +6,7 @@ arcpy.env.workspace = "F:\\independent_study\\visibility_analysis"
 
 # User Inputs (Ideally would be definable parameters instead of having to code in themselves)
 	# Should include input point features, full_dem, buffer size
-input_points = os.path.join('F:\\', 'independent_study', 'Billboardsdata_pghcityplanning', 'LamarSigns.shp')
+input_points = "F:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
 full_dem = "F:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
 buffersize = "1000 Feet"
 
