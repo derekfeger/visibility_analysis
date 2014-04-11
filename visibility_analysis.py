@@ -17,6 +17,7 @@ prepare_table = True
 vispix = 0
 nvispix = 0
 subset_dem = "F:\\independent_study\\visibility_analysis\\dem_files\\clipped_dem.tif"
+full_buffer = "F:\\independent_study\\visibility_analysis\\output_files\\va_rALL_buf.shp"
 
 # Set local functions
 def table_prep(tablefile):
