@@ -23,4 +23,10 @@ full_buffer = "F:\\independent_study\\visibility_analysis\\output_files\\va_rALL
 arcpy.Buffer_analysis(input_points, full_buffer, buffersize)
 
 # Clips full DEM to extent of buffer output_file
-arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "#", "ClippingGeometry")
+#arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "#", "ClippingGeometry")
+
+# Retrieves Spatial Analyst licence, extracts by mask to clip dem to full_buffer, returns Spatial Analyst licence to Licence Manager
+arcpy.CheckOutExtension("Spatial")
+outExtractByMask = arcpy.sa.ExtractByMask(full_dem, full_buffer)
+outExtractByMask.save(subset_dem)
+arcpy.CheckInExtension("Spatial")
