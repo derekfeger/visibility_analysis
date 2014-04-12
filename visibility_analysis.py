@@ -1,8 +1,6 @@
 import arcpy
+import os
 import os.path
-
-# Set the workspace
-arcpy.env.workspace = "F:\\independent_study\\visibility_analysis"
 
 # User Inputs (Ideally would be definable parameters instead of having to code in themselves)
 	# Should include prepare_table
@@ -10,6 +8,7 @@ input_points = "F:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSign
 full_dem = "F:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
 buffersize = "1000 Feet"
 csv_output_file = "F:\\independent_study\\visibility_analysis\\visibility_analysis.csv"
+output_directory = "F:\\independent_study\\visibility_analysis"
 
 # Set global variables, variables for produced files
 recordnumber = 0
@@ -25,6 +24,24 @@ def table_prep(tablefile):
 	prepwrite.write("FID,vispix,nvispix,percent_visibility\n")
 	prepwrite.close() 
 
+def create_folder(foldername):
+	global output_directory
+	if os.path.exists(os.path.join(output_directory, foldername)):
+		pass
+	else:
+		os.mkdir(os.path.join(output_directory, foldername))
+
+# Set the workspace for Arc and Python
+arcpy.env.workspace = output_directory
+os.chdir(output_directory)
+
+# Creates folders to store output files for later processes
+create_folder('va_buffer')
+create_folder('va_clip')
+create_folder('va_demfiles')
+create_folder('va_output_files')
+create_folder('va_points')
+create_folder('va_viewshed')
 
 # Conducts a test to see if user wants to prepare a table file. If so, runs table_prep. Else, continues on to loop.
 if prepare_table == True:
