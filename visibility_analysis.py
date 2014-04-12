@@ -53,6 +53,10 @@ if prepare_table == True:
 else:
 	pass
 
+# Clips full DEM to extent of user-defined buffer around input points for faster processing in the loop
+arcpy.Buffer_analysis(input_points, full_buffer, buffersize)
+arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "0", "ClippingGeometry")
+
 # Loops through all records from Record 0 through Record 1008 (should be formatted range(0,1009))
 for recordnumber in range(0,1):
 
@@ -65,7 +69,7 @@ for recordnumber in range(0,1):
 	arcpy.Buffer_analysis(new_file('va_points','va_r%r.shp' % recordnumber), new_file('va_buffer', 'va_r%rbuf' % recordnumber), buffersize)
 
 	# Clip the subset DEM to the individual billboard buffer
-	arcpy.Clip_management(subset_dem, "#", new_file('va_clip', 'va_r%rclip' % recordnumber), new_file('va_buffer', 'va_r%rbuf.shp' % recordnumber), "#", "ClippingGeometry")
+	arcpy.Clip_management(subset_dem, "#", new_file('va_clip', 'va_r%rclip' % recordnumber), new_file('va_buffer', 'va_r%rbuf.shp' % recordnumber), "0", "ClippingGeometry")
 
 	# Retrieves 3D analyst license, then creates a viewshed within individual DEM, then returns license to license manager
 	arcpy.CheckOutExtension("3D")
