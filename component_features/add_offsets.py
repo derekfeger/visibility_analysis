@@ -26,7 +26,7 @@ def new_file(subdirectory, filename):
 arcpy.env.workspace = output_directory
 os.chdir(output_directory)
 
-for recordnumber in range(0,1):
+for recordnumber in range(0,4):
 
 	# Select a record and create a new feature for just that billboard
 	arcpy.MakeFeatureLayer_management(input_points, "va_r%r" % recordnumber) 
@@ -37,14 +37,14 @@ for recordnumber in range(0,1):
 	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "OffsetA", "FLOAT")
 	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "OffsetB", "FLOAT")
 
-	# Loops through attribute table, assigns a value to OffsetA based on SQL Query, assigns average eye level value to OffsetB
+	# Loops through attribute table, assigns an estimated value to OffsetA, assigns average eye level value to OffsetB
 	# Change individual record to input_points when test is complete
-	with arcpy.da.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber), ("OffsetA")) as cursor:
+	with arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) as cursor:
 		for row in cursor:
 			row.setValue('OffsetA', '30')
 			cursor.UpdateRow(row)
-
-	with arcpy.da.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber), ("OffsetB")) as cursor:
-		for row in cursor:
 			row.setValue('OffsetB', '5.5')
 			cursor.UpdateRow(row)
+
+		del cursor
+		del row
