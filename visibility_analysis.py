@@ -15,8 +15,8 @@ recordnumber = 0
 prepare_table = True
 vispix = 0
 nvispix = 0
-subset_dem = os.path.join(output_directory, 'dem_files', 'subset_dem.tif')
-full_buffer = os.path.join(output_directory, 'output_files', 'va_rALL_buf.shp')
+subset_dem = os.path.join(output_directory, 'va_demfiles', 'subset_dem.tif')
+full_buffer = os.path.join(output_directory, 'va_output_files', 'va_rALL_buf.shp')
 
 # Set local functions
 def table_prep(tablefile):
