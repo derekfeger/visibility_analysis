@@ -9,6 +9,8 @@ full_dem = "E:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.ti
 buffersize = "1000 Feet"
 csv_output_file = "E:\\independent_study\\visibility_analysis\\visibility_analysis.csv"
 output_directory = "E:\\independent_study\\visibility_analysis"
+offseta = 30
+offsetb = 5.5
 
 # Set global variables, variables for produced files
 recordnumber = 0
@@ -73,9 +75,10 @@ for recordnumber in range(0,1):
 	# Change individual record to input_points when test is complete
 	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
 	for row in cursor:
-		row.setValue('OffsetA', 30)
+		global offseta, offsetb
+		row.setValue('OffsetA', offseta)
 		cursor.updateRow(row)
-		row.setValue('OffsetB', 5.5)
+		row.setValue('OffsetB', offsetb)
 		cursor.updateRow(row)
 	# Delete curor and row objects to remove data locks
 	del row
