@@ -39,11 +39,11 @@ for recordnumber in range(0,4):
 
 	# Loops through attribute table, assigns an estimated value to OffsetA, assigns average eye level value to OffsetB
 	# Change individual record to input_points when test is complete
-	with arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) as cursor:
-		for row in cursor:
-			row.setValue('OffsetA', '30')
+	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber))
+	for row in cursor:
+			row.setValue('OffsetA', 30)
 			cursor.UpdateRow(row)
-			row.setValue('OffsetB', '5.5')
+			row.setValue('OffsetB', 5.5)
 			cursor.UpdateRow(row)
 
 		del cursor
