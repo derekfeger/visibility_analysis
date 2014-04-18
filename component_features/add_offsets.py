@@ -4,8 +4,8 @@ import os.path
 
 # User Inputs (Ideally would be definable parameters instead of having to code in themselves)
 	# Should include prepare_table
-input_points = "F:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
-output_directory = "F:\\independent_study\\visibility_analysis"
+input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
+output_directory = "E:\\independent_study\\visibility_analysis"
 
 # Set global variables, variables for produced files
 recordnumber = 0
@@ -39,12 +39,14 @@ for recordnumber in range(0,4):
 
 	# Loops through attribute table, assigns an estimated value to OffsetA, assigns average eye level value to OffsetB
 	# Change individual record to input_points when test is complete
-	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber))
+	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
 	for row in cursor:
-			row.setValue('OffsetA', 30)
-			cursor.UpdateRow(row)
-			row.setValue('OffsetB', 5.5)
-			cursor.UpdateRow(row)
+		row.setValue('OffsetA', 30)
+		cursor.updateRow(row)
+		row.setValue('OffsetB', 5.5)
+		cursor.updateRow(row)
+	# Delete cursor and row objects to remove data locks
+	del row
+	del cursor
 
-		del cursor
-		del row
+	

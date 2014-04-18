@@ -4,11 +4,11 @@ import os.path
 
 # User Inputs (Ideally would be definable parameters instead of having to code in themselves)
 	# Should include prepare_table
-input_points = "F:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
-full_dem = "F:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
+input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
+full_dem = "E:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
 buffersize = "1000 Feet"
-csv_output_file = "F:\\independent_study\\visibility_analysis\\visibility_analysis.csv"
-output_directory = "F:\\independent_study\\visibility_analysis"
+csv_output_file = "E:\\independent_study\\visibility_analysis\\visibility_analysis.csv"
+output_directory = "E:\\independent_study\\visibility_analysis"
 
 # Set global variables, variables for produced files
 recordnumber = 0
@@ -60,15 +60,31 @@ arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "0", "ClippingGeom
 # Loops through all records from Record 0 through Record 1008 (should be formatted range(0,1009))
 for recordnumber in range(0,1):
 
-	# Select a record and create a new feature for just that billboard
+	# Select a record and create a new feature
 	arcpy.MakeFeatureLayer_management(input_points, "va_r%r" % recordnumber) 
 	arcpy.SelectLayerByAttribute_management("va_r%d" % recordnumber, "NEW_SELECTION", ' "FID" = %d ' % recordnumber)
 	arcpy.CopyFeatures_management("va_r%r" % recordnumber, new_file('va_points', 'va_r%r' % recordnumber))
 
-	# Create a 1000ft buffer around current billboard
+	# Adds a field named OffsetA and a field named OffsetB
+	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "OffsetA", "FLOAT")
+	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "OffsetB", "FLOAT")
+
+	# Loops through attribute table, assigns an estimated value to OffsetA, assigns average eye level value to OffsetB
+	# Change individual record to input_points when test is complete
+	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
+	for row in cursor:
+		row.setValue('OffsetA', 30)
+		cursor.updateRow(row)
+		row.setValue('OffsetB', 5.5)
+		cursor.updateRow(row)
+	# Delete curor and row objects to remove data locks
+	del row
+	del cursor
+
+	# Create a user-defined buffer around current record
 	arcpy.Buffer_analysis(new_file('va_points','va_r%r.shp' % recordnumber), new_file('va_buffer', 'va_r%rbuf' % recordnumber), buffersize)
 
-	# Clip the subset DEM to the individual billboard buffer
+	# Clip the subset DEM to the individual buffer
 	arcpy.Clip_management(subset_dem, "#", new_file('va_clip', 'va_r%rclip' % recordnumber), new_file('va_buffer', 'va_r%rbuf.shp' % recordnumber), "0", "ClippingGeometry")
 
 	# Retrieves 3D analyst license, then creates a viewshed within individual DEM, then returns license to license manager
