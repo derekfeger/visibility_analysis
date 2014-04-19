@@ -51,4 +51,4 @@ for recordnumber in loop_range:
 	point_files.append(record_name)
 
 # Merge individual points for each record into a new feature class
-arcpy.Merge_management(point_files, new_file(va_output_files, 'va_allpoints.shp'))
+arcpy.Merge_management(point_files, new_file('va_output_files', 'va_allpoints.shp'))

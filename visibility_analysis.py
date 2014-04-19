@@ -118,13 +118,12 @@ for recordnumber in loop_range:
 	nvispix = 0
 
 	# Add a percent visibility field and populate it with the calculated value 
-	for recordnumber in loop_range:
-		arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "%_visible", "FLOAT")
-		cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
-		for row in cursor:
-			global percent_visibility
-			row.setValue('%_visible', percent_visibility)
-			cursor.updateRow(row)
-		# Delete curor and row objects to remove data locks
-		del row
-		del cursor
+	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "percentvis", "FLOAT")
+	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
+	for row in cursor:
+		global percent_visibility
+		row.setValue('percentvis', percent_visibility)
+		cursor.updateRow(row)
+	# Delete curor and row objects to remove data locks
+	del row
+	del cursor
