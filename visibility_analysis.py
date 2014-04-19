@@ -7,7 +7,7 @@ import os.path
 input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
 full_dem = "E:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
 buffersize = "1000 Feet"
-csv_output_file = "E:\\independent_study\\visibility_analysis\\visibility_analysis.csv"
+csv_output_file = "E:\\independent_study\\visibility_analysis\\va_output_files\\visibility_analysis.csv"
 output_directory = "E:\\independent_study\\visibility_analysis"
 offseta = 30
 offsetb = 5.5
@@ -56,14 +56,18 @@ create_folder('va_viewshed')
 if prepare_table == True:
 	table_prep(csv_output_file)
 else:
-	pass
+	open(csv_output_file, 'a')
 
 # Clips full DEM to extent of user-defined buffer around input points for faster processing in the loop
+print "Preparing subset DEM..."
 arcpy.Buffer_analysis(input_points, full_buffer, buffersize)
 arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "0", "ClippingGeometry")
+print "Complete"
 
 # Loops through all records from Record 0 through Record 1008 (should be formatted range(0,1009))
 for recordnumber in loop_range:
+
+	print "Analyzing record number %d..." % recordnumber
 
 	# Select a record and create a new feature
 	arcpy.MakeFeatureLayer_management(input_points, "va_r%r" % recordnumber) 
@@ -127,3 +131,18 @@ for recordnumber in loop_range:
 	# Delete curor and row objects to remove data locks
 	del row
 	del cursor
+
+	print "Complete"
+
+# Create a list containing every individual point file and Merge individual points for each record into a new feature class
+print "Merging point features..."
+
+for recordnumber in loop_range:
+	record_name = new_file('va_points', 'va_r%r.shp' % recordnumber)
+	point_files.append(record_name)
+
+arcpy.Merge_management(point_files, new_file('va_output_files', 'va_allpoints.shp'))
+
+print "Complete"
+
+print "Visibility Analysis Complete"
