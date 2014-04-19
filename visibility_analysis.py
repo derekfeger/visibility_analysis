@@ -11,6 +11,8 @@ csv_output_file = "E:\\independent_study\\visibility_analysis\\visibility_analys
 output_directory = "E:\\independent_study\\visibility_analysis"
 offseta = 30
 offsetb = 5.5
+startloop = 0
+endloop = 5
 
 # Set global variables, variables for produced files
 recordnumber = 0
@@ -19,6 +21,7 @@ vispix = 0
 nvispix = 0
 subset_dem = os.path.join(output_directory, 'va_demfiles', 'subset_dem.tif')
 full_buffer = os.path.join(output_directory, 'va_output_files', 'va_rALL_buf.shp')
+loop_range = range(startloop,endloop)
 
 # Set local functions
 def table_prep(tablefile):
@@ -60,7 +63,7 @@ arcpy.Buffer_analysis(input_points, full_buffer, buffersize)
 arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "0", "ClippingGeometry")
 
 # Loops through all records from Record 0 through Record 1008 (should be formatted range(0,1009))
-for recordnumber in range(0,1):
+for recordnumber in loop_range:
 
 	# Select a record and create a new feature
 	arcpy.MakeFeatureLayer_management(input_points, "va_r%r" % recordnumber) 
@@ -114,3 +117,14 @@ for recordnumber in range(0,1):
 	vispix = 0
 	nvispix = 0
 
+	# Add a percent visibility field and populate it with the calculated value 
+	for recordnumber in loop_range:
+		arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "%_visible", "FLOAT")
+		cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
+		for row in cursor:
+			global percent_visibility
+			row.setValue('%_visible', percent_visibility)
+			cursor.updateRow(row)
+		# Delete curor and row objects to remove data locks
+		del row
+		del cursor

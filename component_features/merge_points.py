@@ -12,14 +12,13 @@ output_directory = "E:\\independent_study\\visibility_analysis"
 offseta = 30
 offsetb = 5.5
 startloop = 0
-endloop = 3
+endloop = 5
 
 # Set global variables, variables for produced files
 recordnumber = 0
 prepare_table = True
 vispix = 0
 nvispix = 0
-percent_visibility = 0.663
 subset_dem = os.path.join(output_directory, 'va_demfiles', 'subset_dem.tif')
 full_buffer = os.path.join(output_directory, 'va_output_files', 'va_rALL_buf.shp')
 point_files = []
@@ -45,18 +44,6 @@ def new_file(subdirectory, filename):
 # Set the workspace for Arc and Python
 arcpy.env.workspace = output_directory
 os.chdir(output_directory)
-
-# Add a percent visibility field and populate it with the calculated value 
-for recordnumber in loop_range:
-	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "%_visibility", "FLOAT")
-	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
-	for row in cursor:
-		global percent_visibility
-		row.setValue('%_visibility', percent_visibility)
-		cursor.updateRow(row)
-	# Delete curor and row objects to remove data locks
-	del row
-	del cursor
 
 # Create a list containing every individual point file
 for recordnumber in loop_range:
