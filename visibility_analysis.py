@@ -53,11 +53,8 @@ create_folder('va_output_files')
 create_folder('va_points')
 create_folder('va_viewshed')
 
-# Conducts a test to see if user wants to prepare a table file. If so, runs table_prep. Else, continues on to loop.
-if prepare_table == True:
-	table_prep(csv_output_file)
-else:
-	open(csv_output_file, 'a')
+# Prepare a table file for output of visibility results
+table_prep(csv_output_file)
 
 # Clips full DEM to extent of user-defined buffer around input points for faster processing in the loop
 print "Preparing subset DEM..."
