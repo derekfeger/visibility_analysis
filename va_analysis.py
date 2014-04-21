@@ -20,7 +20,7 @@ subset_dem = os.path.join(output_directory, 'va_demfiles', 'subset_dem.tif')
 full_buffer = os.path.join(output_directory, 'va_output_files', 'va_rALL_buf.shp')
 csv_output_file = os.path.join(output_directory, 'va_output_files', 'visibility_analysis.csv')
 point_files = []
-loop_range = range(startloop,endloop)
+loop_range = xrange(startloop,endloop)
 
 # Set local functions
 def table_prep(tablefile):
@@ -41,30 +41,13 @@ def file_path(subdirectory, filename):
 
 def output_message(message):
 	print message
-	arcpy.addMessage(message)
+	arcpy.AddMessage(message)
 
 # Set the workspace for Arc and Python
 arcpy.env.workspace = output_directory
 os.chdir(output_directory)
 
-# Creates folders to store output files for later processes
-create_folder('va_buffer')
-create_folder('va_clip')
-create_folder('va_demfiles')
-create_folder('va_output_files')
-create_folder('va_points')
-create_folder('va_viewshed')
-
-# Prepare a table file for output of visibility results
-table_prep(csv_output_file)
-
-# Clips full DEM to extent of user-defined buffer around input points for faster processing in the loop
-output_message("Preparing subset DEM...")
-arcpy.Buffer_analysis(input_points, full_buffer, buffersize)
-arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "0", "ClippingGeometry")
-output_message("Complete")
-
-# Loops through all records from Record 0 through Record 1008 (should be formatted range(0,1009))
+# Loops through all records in specified loop range
 for recordnumber in loop_range:
 
 	output_message("Analyzing record number %d..." % recordnumber)
@@ -78,8 +61,7 @@ for recordnumber in loop_range:
 	arcpy.AddField_management(file_path('va_points', 'va_r%r.shp' % recordnumber), "OffsetA", "FLOAT")
 	arcpy.AddField_management(file_path('va_points', 'va_r%r.shp' % recordnumber), "OffsetB", "FLOAT")
 
-	# Loops through attribute table, assigns an estimated value to OffsetA, assigns average eye level value to OffsetB
-	# Change individual record to input_points when test is complete
+	# Loops through attribute table, assigns defined values to OffsetA and OffsetB
 	cursor = arcpy.UpdateCursor(file_path('va_points', 'va_r%r.shp' % recordnumber)) 
 	for row in cursor:
 		global offseta, offsetb
@@ -87,7 +69,7 @@ for recordnumber in loop_range:
 		cursor.updateRow(row)
 		row.setValue('OffsetB', offsetb)
 		cursor.updateRow(row)
-	# Delete curor and row objects to remove data locks
+	# Delete cursor and row objects to remove data locks
 	del row
 	del cursor
 
@@ -133,16 +115,5 @@ for recordnumber in loop_range:
 	del cursor
 
 	output_message("Complete")
-
-# Create a list containing every individual point file and Merge individual points for each record into a new feature class
-output_message("Merging point features...")
-
-for recordnumber in loop_range:
-	record_name = file_path('va_points', 'va_r%r.shp' % recordnumber)
-	point_files.append(record_name)
-
-arcpy.Merge_management(point_files, file_path('va_output_files', 'va_rALLpoints.shp'))
-
-output_message("Complete")
 
 output_message("Visibility Analysis Complete")
