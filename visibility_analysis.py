@@ -2,8 +2,7 @@ import arcpy
 import os
 import os.path
 
-# User Inputs (Ideally would be definable parameters instead of having to code in themselves)
-	# Should include prepare_table
+# User Inputs 
 input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
 full_dem = "E:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
 buffersize = "1000 Feet"
@@ -15,7 +14,6 @@ endloop = 5
 
 # Set global variables, variables for produced files
 recordnumber = startloop
-prepare_table = True
 vispix = 0
 nvispix = 0
 subset_dem = os.path.join(output_directory, 'va_demfiles', 'subset_dem.tif')
@@ -37,9 +35,13 @@ def create_folder(foldername):
 	else:
 		os.mkdir(os.path.join(output_directory, foldername))
 
-def new_file(subdirectory, filename):
+def file_path(subdirectory, filename):
 	create_folder(subdirectory)
 	return os.path.join(output_directory, subdirectory, filename)
+
+def output_message(message):
+	print message
+	arcpy.addMessage(message)
 
 # Set the workspace for Arc and Python
 arcpy.env.workspace = output_directory
@@ -57,28 +59,28 @@ create_folder('va_viewshed')
 table_prep(csv_output_file)
 
 # Clips full DEM to extent of user-defined buffer around input points for faster processing in the loop
-print "Preparing subset DEM..."
+output_message("Preparing subset DEM...")
 arcpy.Buffer_analysis(input_points, full_buffer, buffersize)
 arcpy.Clip_management(full_dem, "#", subset_dem, full_buffer, "0", "ClippingGeometry")
-print "Complete"
+output_message("Complete")
 
 # Loops through all records from Record 0 through Record 1008 (should be formatted range(0,1009))
 for recordnumber in loop_range:
 
-	print "Analyzing record number %d..." % recordnumber
+	output_message("Analyzing record number %d..." % recordnumber)
 
 	# Select a record and create a new feature
 	arcpy.MakeFeatureLayer_management(input_points, "va_r%r" % recordnumber) 
 	arcpy.SelectLayerByAttribute_management("va_r%d" % recordnumber, "NEW_SELECTION", ' "FID" = %d ' % recordnumber)
-	arcpy.CopyFeatures_management("va_r%r" % recordnumber, new_file('va_points', 'va_r%r' % recordnumber))
+	arcpy.CopyFeatures_management("va_r%r" % recordnumber, file_path('va_points', 'va_r%r' % recordnumber))
 
 	# Adds a field named OffsetA and a field named OffsetB
-	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "OffsetA", "FLOAT")
-	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "OffsetB", "FLOAT")
+	arcpy.AddField_management(file_path('va_points', 'va_r%r.shp' % recordnumber), "OffsetA", "FLOAT")
+	arcpy.AddField_management(file_path('va_points', 'va_r%r.shp' % recordnumber), "OffsetB", "FLOAT")
 
 	# Loops through attribute table, assigns an estimated value to OffsetA, assigns average eye level value to OffsetB
 	# Change individual record to input_points when test is complete
-	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
+	cursor = arcpy.UpdateCursor(file_path('va_points', 'va_r%r.shp' % recordnumber)) 
 	for row in cursor:
 		global offseta, offsetb
 		row.setValue('OffsetA', offseta)
@@ -90,22 +92,22 @@ for recordnumber in loop_range:
 	del cursor
 
 	# Create a user-defined buffer around current record
-	arcpy.Buffer_analysis(new_file('va_points','va_r%r.shp' % recordnumber), new_file('va_buffer', 'va_r%rbuf' % recordnumber), buffersize)
+	arcpy.Buffer_analysis(file_path('va_points','va_r%r.shp' % recordnumber), file_path('va_buffer', 'va_r%rbuf' % recordnumber), buffersize)
 
 	# Clip the subset DEM to the individual buffer
-	arcpy.Clip_management(subset_dem, "#", new_file('va_clip', 'va_r%rclip' % recordnumber), new_file('va_buffer', 'va_r%rbuf.shp' % recordnumber), "0", "ClippingGeometry")
+	arcpy.Clip_management(subset_dem, "#", file_path('va_clip', 'va_r%rclip' % recordnumber), file_path('va_buffer', 'va_r%rbuf.shp' % recordnumber), "0", "ClippingGeometry")
 
 	# Retrieves 3D analyst license, then creates a viewshed within individual DEM, then returns license to license manager
 	arcpy.CheckOutExtension("3D")
-	arcpy.Viewshed_3d(new_file('va_clip', 'va_r%rclip' % recordnumber), new_file('va_points', 'va_r%r.shp' % recordnumber), new_file('va_viewshed', 'va_r%rvshd' % recordnumber))
+	arcpy.Viewshed_3d(file_path('va_clip', 'va_r%rclip' % recordnumber), file_path('va_points', 'va_r%r.shp' % recordnumber), file_path('va_viewshed', 'va_r%rvshd' % recordnumber))
 	arcpy.CheckInExtension("3D")
 
 	# Pulls number of visible and not-visible pixels out of the table. Stores in variables vispix and nvispix, respectively.
-	with arcpy.da.SearchCursor(new_file('va_viewshed', 'va_r%rvshd' % recordnumber), ("COUNT"), ' "Rowid" = 0') as cursor:
+	with arcpy.da.SearchCursor(file_path('va_viewshed', 'va_r%rvshd' % recordnumber), ("COUNT"), ' "Rowid" = 0') as cursor:
 		for row in cursor:
 			nvispix = row[0]
 		
-	with arcpy.da.SearchCursor(new_file('va_viewshed', 'va_r%rvshd' % recordnumber), ("COUNT"), ' "Rowid" = 1') as cursor:
+	with arcpy.da.SearchCursor(file_path('va_viewshed', 'va_r%rvshd' % recordnumber), ("COUNT"), ' "Rowid" = 1') as cursor:
 		for row in cursor:
 			vispix = row[0]
 
@@ -120,8 +122,8 @@ for recordnumber in loop_range:
 	nvispix = 0
 
 	# Add a percent visibility field and populate it with the calculated value 
-	arcpy.AddField_management(new_file('va_points', 'va_r%r.shp' % recordnumber), "percentvis", "FLOAT")
-	cursor = arcpy.UpdateCursor(new_file('va_points', 'va_r%r.shp' % recordnumber)) 
+	arcpy.AddField_management(file_path('va_points', 'va_r%r.shp' % recordnumber), "percentvis", "FLOAT")
+	cursor = arcpy.UpdateCursor(file_path('va_points', 'va_r%r.shp' % recordnumber)) 
 	for row in cursor:
 		global percent_visibility
 		row.setValue('percentvis', percent_visibility)
@@ -130,17 +132,17 @@ for recordnumber in loop_range:
 	del row
 	del cursor
 
-	print "Complete"
+	output_message("Complete")
 
 # Create a list containing every individual point file and Merge individual points for each record into a new feature class
-print "Merging point features..."
+output_message("Merging point features...")
 
 for recordnumber in loop_range:
-	record_name = new_file('va_points', 'va_r%r.shp' % recordnumber)
+	record_name = file_path('va_points', 'va_r%r.shp' % recordnumber)
 	point_files.append(record_name)
 
-arcpy.Merge_management(point_files, new_file('va_output_files', 'va_rALLpoints.shp'))
+arcpy.Merge_management(point_files, file_path('va_output_files', 'va_rALLpoints.shp'))
 
-print "Complete"
+output_message("Complete")
 
-print "Visibility Analysis Complete"
+output_message("Visibility Analysis Complete")
