@@ -8,11 +8,6 @@ full_dem = "E:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.ti
 buffersize = "1000 Feet"
 output_directory = "E:\\independent_study\\visibility_analysis"
 
-# Set global variables, variables for produced files
-subset_dem = file_path('va_demfiles', 'subset_dem.tif')
-full_buffer = file_path('va_output_files', 'va_rALL_buf.shp')
-csv_output_file = file_path('va_output_files', 'visibility_analysis.csv')
-
 # Set local functions
 def table_prep(tablefile):
 	prepwrite = open(tablefile, 'w')
@@ -33,6 +28,11 @@ def file_path(subdirectory, filename):
 def output_message(message):
 	print message
 	arcpy.AddMessage(message)
+
+# Set global variables, variables for produced files
+subset_dem = file_path('va_demfiles', 'subset_dem.tif')
+full_buffer = file_path('va_output_files', 'va_rALL_buf.shp')
+csv_output_file = file_path('va_output_files', 'visibility_analysis.csv')
 
 # Set the workspace for Arc and Python
 arcpy.env.workspace = output_directory

@@ -4,23 +4,12 @@ import os.path
 
 # User Inputs 
 input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
-full_dem = "E:\\independent_study\\visibility_analysis\\fullcity_outputmosaic.tif"
 buffersize = "1000 Feet"
 output_directory = "E:\\independent_study\\visibility_analysis"
 offseta = 30
 offsetb = 5.5
 startloop = 0
 endloop = 5
-
-# Set global variables, variables for produced files
-recordnumber = startloop
-vispix = 0
-nvispix = 0
-subset_dem = os.path.join(output_directory, 'va_demfiles', 'subset_dem.tif')
-full_buffer = os.path.join(output_directory, 'va_output_files', 'va_rALL_buf.shp')
-csv_output_file = os.path.join(output_directory, 'va_output_files', 'visibility_analysis.csv')
-point_files = []
-loop_range = xrange(startloop,endloop)
 
 # Set local functions
 def table_prep(tablefile):
@@ -42,6 +31,14 @@ def file_path(subdirectory, filename):
 def output_message(message):
 	print message
 	arcpy.AddMessage(message)
+
+# Set global variables, variables for produced files
+recordnumber = startloop
+vispix = 0
+nvispix = 0
+subset_dem = file_path('va_demfiles', 'subset_dem.tif')
+csv_output_file = file_path('va_output_files', 'visibility_analysis.csv')
+loop_range = xrange(startloop,endloop)
 
 # Set the workspace for Arc and Python
 arcpy.env.workspace = output_directory
