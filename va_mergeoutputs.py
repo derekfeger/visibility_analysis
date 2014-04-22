@@ -37,6 +37,9 @@ def output_message(message):
 arcpy.env.workspace = output_directory
 os.chdir(output_directory)
 
+# Sets ArcGIS dialog progressor to step for greater exposure to the user of the state of the process
+arcpy.SetProgressor("step")
+
 # Create a list containing every individual point file and Merge individual points for each record into a new feature class
 output_message("Merging point features...")
 
