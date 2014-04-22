@@ -38,9 +38,6 @@ csv_output_file = file_path('va_output_files', 'visibility_analysis.csv')
 arcpy.env.workspace = output_directory
 os.chdir(output_directory)
 
-# Sets ArcGIS dialog progressor to step for greater exposure to the user of the state of the process
-arcpy.SetProgressor("step")
-
 # Creates folders to store output files for later processes
 output_message("Creating folders to store outputs...")
 
