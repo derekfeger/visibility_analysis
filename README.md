@@ -7,8 +7,8 @@ Contents:
 - [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Known Issues/Limitations](#known issues/limitations)
-- [Licence and Contribution](#licence and contribution)
+- [Known Issues/Limitations](#known-issueslimitations)
+- [Licence and Contribution](#licence-and-contribution)
 - [Contact](#contact)
 
 Overview:
