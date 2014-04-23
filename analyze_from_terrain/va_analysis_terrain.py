@@ -73,13 +73,16 @@ for recordnumber in loop_range:
 	# Create a user-defined buffer around current record
 	arcpy.Buffer_analysis(file_path('va_points','va_r%r.shp' % recordnumber), file_path('va_buffer', 'va_r%rbuf.shp' % recordnumber), buffersize)
 
-	# Retrieves 3D analyst license, sets environment to recently created buffer, creates a DEM from terrain, returns license
+	# Retrieves 3D analyst license, sets processing extent to recently created buffer, creates a DEM from terrain, returns license
 	arcpy.CheckOutExtension("3D")
 	arcpy.env.extent = file_path('va_buffer', 'va_r%rbuf.shp' % recordnumber)
-	arcpy.ddd.TerrainToRaster(input_terrain, file_path('va_clip', 'va_r%rclip' % recordnumber))
+	arcpy.ddd.TerrainToRaster(input_terrain, file_path('va_demfiles', 'va_r%rdem' % recordnumber))
 	arcpy.CheckInExtension("3D")
 	arcpy.ClearEnvironment("extent")
 	
+	# Clip the new DEM to the individual buffer
+	arcpy.Clip_management(file_path('va_demfiles', 'va_r%rdem' % recordnumber), "#", file_path('va_clip', 'va_r%rclip' % recordnumber), file_path('va_buffer', 'va_r%rbuf.shp' % recordnumber), "0", "ClippingGeometry")
+
 	# Retrieves 3D analyst license, then creates a viewshed within individual DEM, then returns license to license manager
 	arcpy.CheckOutExtension("3D")
 	arcpy.Viewshed_3d(file_path('va_clip', 'va_r%rclip' % recordnumber), file_path('va_points', 'va_r%r.shp' % recordnumber), file_path('va_viewshed', 'va_r%rvshd' % recordnumber))
