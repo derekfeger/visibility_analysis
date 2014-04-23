@@ -70,7 +70,9 @@ Usage:
 
 The intended workflow for this set of tools is as follows:
 
-1. Use va_prep.py to define your area of analysis, clip your input DEM to 
+### First
+
+Use va_prep.py to define your area of analysis, clip your input DEM to 
 the extent of that defined area of analysis, and create containers for later
 outputs of the analysis process. 
 
@@ -107,7 +109,7 @@ outputs of the analysis process.
 	```````````````````````````````````````````````````````````````````````````
 
 	- Important: Your file paths must contain the double back slash (`\\`)
-	separators, not a single back slash (`\`), a forward slash (`\`), or any
+	separators, not a single back slash (`\`), a forward slash (`/`), or any
 	other separator. Also, your filepath must sit between the double quotes.
 
 	- You may specify units for buffersize if you wish. Arc is very specific 
@@ -124,7 +126,9 @@ outputs of the analysis process.
 	text editor, so hit 'OK' to run the tool.
 
 
-2. Use va_analysis.py to calculate the visibility for each pixel within your 
+### Second
+
+Use va_analysis.py to calculate the visibility for each pixel within your 
 defined buffer radius and export the results to a table that can be opened in 
 any text editor and most spreadsheet applications, including Microsoft Excel.
 
@@ -202,7 +206,10 @@ any text editor and most spreadsheet applications, including Microsoft Excel.
 	parameters." You should have already set those parameters within your
 	text editor, so hit 'OK' to run the tool.
 
-3. (Optional): Use va_mergeoutputs.py to merge all of the single point features
+
+### Third
+
+(Optional): Use va_mergeoutputs.py to merge all of the single point features
 created at the analysis stage into a new shapefile that reflects the results of
 the analysis within its attribute table.
 
@@ -287,7 +294,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-###Contribution
+### Contribution
 
 Feel free to contribute to this project by:
 
