@@ -110,7 +110,7 @@ for later outputs.
 - The script is configured by opening your favorite text editor and 
 adjusting the values in the User Inputs section. You will have to designate
 a shapefile for the input_points, a raster for the DEM, a buffer distance 
-for the radius of your analysis, and an already existing folder in which 
+for the radius of your analysis, and an *already existing* folder in which 
 you would like process outputs to be stored. Your script should look 
 something like this when using a DEM:
 
@@ -135,6 +135,11 @@ output_directory = "C:\\your_path\\visibility_analysis"
 separators, not a single back slash (`\`), a forward slash (`/`), or any
 other separator. Also, your filepath must sit between the double quotes.
 
+- Also Important: The path you specify for `output_directory` must already exist
+before you run the tool. The script will crash if it does not. If you want the
+analysis outputs stored in a folder does not already exist, create it in your 
+file browser first.
+
 - You may specify units for `buffersize` if you wish. Arc is very specific 
 about how units should be written out (e.g. Feet, Meters, DecimalDegrees).
 Consult Arc documentation for other units if you are having problems. 
@@ -157,9 +162,9 @@ any text editor and most spreadsheet applications, including Microsoft Excel.
 
 - This tool may be run on your entire dataset or any number of
 non-overlapping subsets of your data. This is done by setting the 
-startloop and endloop variables in the user inputs section of the script.
-Startloop should be set to the first record you want to include in the 
-analysis, and endloop should be set to the number of the last record you
+`startloop` and `endloop` variables in the user inputs section of the script.
+`startloop` should be set to the first record you want to include in the 
+analysis, and `endloop` should be set to the number of the last record you
 want to include in the analysis plus one. 
 
 - For example, assume we are trying to run an analysis of a point dataset 
@@ -230,7 +235,7 @@ parameters." You should have already set those parameters within your
 text editor, so hit 'OK' to run the tool.
 
 
-### Third: (Optional) va_mergeoutputs
+### Third: va_mergeoutputs (Optional)
 
 Use va_mergeoutputs to merge all of the single point features created at the 
 analysis stage into a new shapefile that reflects the results of the analysis 
