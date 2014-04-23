@@ -55,3 +55,11 @@ table_prep(csv_output_file)
 
 output_message("Complete")
 
+# Creates an output file for the full analysis area based on a user-specified buffer
+output_message("Preparing analysis area...")
+
+arcpy.Buffer_analysis(input_points, full_buffer, buffersize)
+
+output_message("Complete")
+
+output_message("Preparation complete.")
