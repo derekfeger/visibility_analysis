@@ -4,7 +4,7 @@ import os.path
 
 # User Inputs 
 input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
-input_terrain = "E:\\independent_study\\Lidar LAS\\Terrain\\terrains.gdb\\featuredataset\\pittsburgh_terrains"
+input_terrain = "E:\\independent_study\\Lidar_LAS\\Terrain\\terrains.gdb\\pittsburgh_terrains\\pittsburgh_fullTerrain"
 buffersize = "1000 Feet"
 output_directory = "E:\\independent_study\\visibility_analysis"
 offseta = 30
@@ -41,6 +41,7 @@ csv_output_file = file_path('va_output_files', 'visibility_analysis.csv')
 loop_range = xrange(startloop,endloop)
 
 # Set the workspace for Arc and Python
+arcpy.env.workspace = output_directory
 os.chdir(output_directory)
 
 # Loops through all records in specified loop range
@@ -74,11 +75,11 @@ for recordnumber in loop_range:
 
 	# Retrieves 3D analyst license, sets environment to recently created buffer, creates a DEM from terrain, returns license
 	arcpy.CheckOutExtension("3D")
-	arcpy.env.workspace = file_path('va_buffer', 'va_r%rbuf' % recordnumber)
+	arcpy.env.extent = file_path('va_buffer', 'va_r%rbuf' % recordnumber)
 	arcpy.ddd.TerrainToRaster(input_terrain, file_path('va_clip', 'va_r%rclip' % recordnumber))
 	arcpy.CheckInExtension("3D")
-	arcpy.ClearEnvironment(output_directory)
-
+	arcpy.ClearEnvironment("extent")
+	
 	# Retrieves 3D analyst license, then creates a viewshed within individual DEM, then returns license to license manager
 	arcpy.CheckOutExtension("3D")
 	arcpy.Viewshed_3d(file_path('va_clip', 'va_r%rclip' % recordnumber), file_path('va_points', 'va_r%r.shp' % recordnumber), file_path('va_viewshed', 'va_r%rvshd' % recordnumber))
