@@ -8,7 +8,7 @@ Contents:
 - [Installation](#installation)
 - [Usage](#usage)
 - [Known Issues/Limitations](#known-issueslimitations)
-- [Licence and Contribution](#licence-and-contribution)
+- [License and Contribution](#license-and-contribution)
 - [Contact](#contact)
 
 Overview:
@@ -271,7 +271,7 @@ for this by clipping areas covered by obstructions will not solve this issue,
 as the visibility "shadow" cast by an obsturction will not be calculated
 in areas blocked from view by that obstruction.
 
-Licence and Contribution
+License and Contribution
 ------------------------
 
 Copyright (c) 2014 Derek Feger
