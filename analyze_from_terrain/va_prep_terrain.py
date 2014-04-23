@@ -5,7 +5,7 @@ import os.path
 # User Inputs 
 input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
 buffersize = "1000 Feet"
-output_directory = "E:\\independent_study\\visibility_analysis"
+output_directory = "E:\\independent_study\\visibility_analysis_fromterrain"
 
 # Set local functions
 def table_prep(tablefile):

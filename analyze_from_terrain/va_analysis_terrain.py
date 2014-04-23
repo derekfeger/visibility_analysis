@@ -6,7 +6,7 @@ import os.path
 input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
 input_terrain = "E:\\independent_study\\Lidar_LAS\\Terrain\\terrains.gdb\\pittsburgh_terrains\\pittsburgh_fullTerrain"
 buffersize = "1000 Feet"
-output_directory = "E:\\independent_study\\visibility_analysis"
+output_directory = "E:\\independent_study\\visibility_analysis_fromterrain"
 offseta = 30
 offsetb = 5.5
 startloop = 0
@@ -71,11 +71,11 @@ for recordnumber in loop_range:
 	del cursor
 
 	# Create a user-defined buffer around current record
-	arcpy.Buffer_analysis(file_path('va_points','va_r%r.shp' % recordnumber), file_path('va_buffer', 'va_r%rbuf' % recordnumber), buffersize)
+	arcpy.Buffer_analysis(file_path('va_points','va_r%r.shp' % recordnumber), file_path('va_buffer', 'va_r%rbuf.shp' % recordnumber), buffersize)
 
 	# Retrieves 3D analyst license, sets environment to recently created buffer, creates a DEM from terrain, returns license
 	arcpy.CheckOutExtension("3D")
-	arcpy.env.extent = file_path('va_buffer', 'va_r%rbuf' % recordnumber)
+	arcpy.env.extent = file_path('va_buffer', 'va_r%rbuf.shp' % recordnumber)
 	arcpy.ddd.TerrainToRaster(input_terrain, file_path('va_clip', 'va_r%rclip' % recordnumber))
 	arcpy.CheckInExtension("3D")
 	arcpy.ClearEnvironment("extent")
