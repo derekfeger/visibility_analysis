@@ -38,7 +38,7 @@ Download and extract this repository to a local directory on your computer.
 
 These scripts can be utilized in two ways:
 
-1. As tools
+- As tools in ArcGIS
 
 	- The scripts may be packaged as tools within ArcCatalog and stored inside
 	a toolbox. This has already been done for you, with the toolbox included in
@@ -56,7 +56,7 @@ These scripts can be utilized in two ways:
 
 	- You're done.
 
-2. As stand-alone scripts:
+- As stand-alone scripts:
 
 	- Open your preferred command-line shell, such a PowerShell.
 
@@ -76,54 +76,55 @@ Use va_prep.py to define your area of analysis, clip your input DEM to
 the extent of that defined area of analysis, and create containers for later
 outputs of the analysis process. 
 
-	- This script should only be run once. 
+- This script should only be run once. 
 
-	- Viewshedding is one of the most computationally intensive tasks ArcGIS 
-	can	perform. This step is intended to reduce the amount of information 
-	that must be processed to just the areas that need to be calculated.
+- Viewshedding is one of the most computationally intensive tasks ArcGIS 
+can	perform. This step is intended to reduce the amount of information 
+that must be processed to just the areas that need to be calculated.
 
-	- The outputs of this script are:
-		- A series of folders created within your specified output folder
+- The outputs of this script are:
 
-		- A blank .csv file (found in output_folder\\va_output_files)
+	- A series of folders created within your specified output folder
 
-		- A shapefile displaying your entire analysis extent (found in 
-		output_folder\\va_output_files)
+	- A blank .csv file (found in output_folder\\va_output_files)
 
-		- A raster file containing your clipped DEM (found in output_folder\\
-		va_demfiles)
+	- A shapefile displaying your entire analysis extent (found in 
+	output_folder\\va_output_files)
 
-	- The script is configured by opening your favorite text editor and 
-	adjusting the values in the User Inputs section. You will have to designate
-	a shapefile for the input_points, a raster for the DEM, a buffer distance 
-	for the radius of your analysis, and an already existing folder in which 
-	you would like process outputs to be stored. Your script should look 
-	something like this:
+	- A raster file containing your clipped DEM (found in output_folder\\
+	va_demfiles)
 
-	```````````````````````````````````````````````````````````````````````````
-	# User Inputs 
-	input_points = "C:\\your_path\\point_data\\input_points.shp"
-	full_dem = "C:\\your_path\\DEM_data\\full_dem.tif"
-	buffersize = "XXX Units"
-	output_directory = "C:\\your_path\\visibility_analysis"
-	```````````````````````````````````````````````````````````````````````````
+- The script is configured by opening your favorite text editor and 
+adjusting the values in the User Inputs section. You will have to designate
+a shapefile for the input_points, a raster for the DEM, a buffer distance 
+for the radius of your analysis, and an already existing folder in which 
+you would like process outputs to be stored. Your script should look 
+something like this:
 
-	- Important: Your file paths must contain the double back slash (`\\`)
-	separators, not a single back slash (`\`), a forward slash (`/`), or any
-	other separator. Also, your filepath must sit between the double quotes.
+```````````````````````````````````````````````````````````````````````````
+# User Inputs 
+input_points = "C:\\your_path\\point_data\\input_points.shp"
+full_dem = "C:\\your_path\\DEM_data\\full_dem.tif"
+buffersize = "XXX Units"
+output_directory = "C:\\your_path\\visibility_analysis"
+```````````````````````````````````````````````````````````````````````````
 
-	- You may specify units for buffersize if you wish. Arc is very specific 
-	about how units should be written out (e.g. Feet, Meters, DecimalDegrees).
-	Consult Arc documentation for other units if you are having problems. 
+- Important: Your file paths must contain the double back slash (`\\`)
+separators, not a single back slash (`\`), a forward slash (`/`), or any
+other separator. Also, your filepath must sit between the double quotes.
 
-	- If you do not specify a unit for buffersize and are running this tool 
-	through an .mxd, Arc will automatically use the unit of measure for that 
-	map document. 
+- You may specify units for buffersize if you wish. Arc is very specific 
+about how units should be written out (e.g. Feet, Meters, DecimalDegrees).
+Consult Arc documentation for other units if you are having problems. 
 
-	- If you are running this as a tool, click on the script in ArcToolbox. 
-	You will see a window that says something like "This tool has no 
-	parameters." You should have already set those parameters within your
-	text editor, so hit 'OK' to run the tool.
+- If you do not specify a unit for buffersize and are running this tool 
+through an .mxd, Arc will automatically use the unit of measure for that 
+map document. 
+
+- If you are running this as a tool, click on the script in ArcToolbox. 
+You will see a window that says something like "This tool has no 
+parameters." You should have already set those parameters within your
+text editor, so hit 'OK' to run the tool.
 
 
 ### Second
@@ -132,79 +133,79 @@ Use va_analysis.py to calculate the visibility for each pixel within your
 defined buffer radius and export the results to a table that can be opened in 
 any text editor and most spreadsheet applications, including Microsoft Excel.
 
-	- This tool may be run on your entire dataset or any number of
-	non-overlapping subsets of your data. This is done by setting the 
-	startloop and endloop variables in the user inputs section of the script.
-	Startloop should be set to the first record you want to include in the 
-	analysis, and endloop should be set to the number of the last record you
-	want to include in the analysis plus one. 
+- This tool may be run on your entire dataset or any number of
+non-overlapping subsets of your data. This is done by setting the 
+startloop and endloop variables in the user inputs section of the script.
+Startloop should be set to the first record you want to include in the 
+analysis, and endloop should be set to the number of the last record you
+want to include in the analysis plus one. 
 
-	- For example, assume we are trying to run an analysis of a point dataset 
-	which contains records ranging from 0 to 200. If I wanted to run the 
-	analysis in two parts, I would do so by first specifying the loop variables
-	to have values like this:
+- For example, assume we are trying to run an analysis of a point dataset 
+which contains records ranging from 0 to 200. If I wanted to run the 
+analysis in two parts, I would do so by first specifying the loop variables
+to have values like this:
 
-	```````````````````````````````````````````````````````````````````````````
-	startloop = 0
-	endloop = 100
-	```````````````````````````````````````````````````````````````````````````
+```````````````````````````````````````````````````````````````````````````
+startloop = 0
+endloop = 100
+```````````````````````````````````````````````````````````````````````````
 
-	This would yield an analysis of records 0 through 99. I could then run 
-	another analysis after resetting the values to:
+This would yield an analysis of records 0 through 99. I could then run 
+another analysis after resetting the values to:
 
-	```````````````````````````````````````````````````````````````````````````
-	startloop = 100
-	endloop = 201
-	```````````````````````````````````````````````````````````````````````````
+```````````````````````````````````````````````````````````````````````````
+startloop = 100
+endloop = 201
+```````````````````````````````````````````````````````````````````````````
 
-	This would complete the analysis by analyzing records 100 through 200 and 
-	writing the results of the analysis to the same table as the first 
-	analysis. Or, you could run it all at once, setting the values to:
+This would complete the analysis by analyzing records 100 through 200 and 
+writing the results of the analysis to the same table as the first 
+analysis. Or, you could run it all at once, setting the values to:
 
-	```````````````````````````````````````````````````````````````````````````
-	startloop = 0
-	endloop = 201
-	```````````````````````````````````````````````````````````````````````````
+```````````````````````````````````````````````````````````````````````````
+startloop = 0
+endloop = 201
+```````````````````````````````````````````````````````````````````````````
 
-	- In addition to writing the values of the analysis to a .csv table, number
-	of visible pixels, number of non-visible pixels, and percentage of visible
-	pixels are all written to the attribute table of each individual point file 
-	produced by the process.
+- In addition to writing the values of the analysis to a .csv table, number
+of visible pixels, number of non-visible pixels, and percentage of visible
+pixels are all written to the attribute table of each individual point file 
+produced by the process.
 
-	- Other outputs of this script are:
+- Other outputs of this script are:
 
-		- A buffer for each record.
+	- A buffer for each record.
 
-		- A clipped DEM raster within the buffer radius for each record.
+	- A clipped DEM raster within the buffer radius for each record.
 
-		- A viewshed raster for each record analyzed.
+	- A viewshed raster for each record analyzed.
 
-	- Important: The input_points, buffersize, and output_folder variables must
-	be set to the same filepaths you set them to in va_prep.py, or this tool 
-	won't work.
+- Important: The input_points, buffersize, and output_folder variables must
+be set to the same filepaths you set them to in va_prep.py, or this tool 
+won't work.
 
-	- The variables offseta and offsetb are used to account for the fact that 
-	you rarely want your point features to sit directly on top of your DEM.
-	Offseta represents the height of your point feature above the ground, and 
-	offsetb represents the height of your observer. As an example, you may be 
-	analyzing the visibility of 30 foot tall features to a person of average 
-	height (with 5.5 feet representing average eye level). You would do so by 
-	setting the variables like this:
+- The variables offseta and offsetb are used to account for the fact that 
+you rarely want your point features to sit directly on top of your DEM.
+Offseta represents the height of your point feature above the ground, and 
+offsetb represents the height of your observer. As an example, you may be 
+analyzing the visibility of 30 foot tall features to a person of average 
+height (with 5.5 feet representing average eye level). You would do so by 
+setting the variables like this:
 
-	```````````````````````````````````````````````````````````````````````````
-	offseta = "30 Feet"
-	offsetb = "5.5 Feet"
-	```````````````````````````````````````````````````````````````````````````
+```````````````````````````````````````````````````````````````````````````
+offseta = "30 Feet"
+offsetb = "5.5 Feet"
+```````````````````````````````````````````````````````````````````````````
 
-	Similar to above, you can specify units for your offset heights (in which 
-	case you must wrap the value in double quotes as in the example above), or 
-	you can	just set them equal to a number and let Arc use default units for
-	the map (if you are using the script as a tool). 
+Similar to above, you can specify units for your offset heights (in which 
+case you must wrap the value in double quotes as in the example above), or 
+you can	just set them equal to a number and let Arc use default units for
+the map (if you are using the script as a tool). 
 
-	- If you are running this as a tool, click on the script in ArcToolbox. 
-	You will see a window that says something like "This tool has no 
-	parameters." You should have already set those parameters within your
-	text editor, so hit 'OK' to run the tool.
+- If you are running this as a tool, click on the script in ArcToolbox. 
+You will see a window that says something like "This tool has no 
+parameters." You should have already set those parameters within your
+text editor, so hit 'OK' to run the tool.
 
 
 ### Third
@@ -213,12 +214,12 @@ any text editor and most spreadsheet applications, including Microsoft Excel.
 created at the analysis stage into a new shapefile that reflects the results of
 the analysis within its attribute table.
 
-	- If you choose to merge the points created in the last step, only run this 
-	script once over the entire range of the data. This script does not
-	currently work on a series of non-overlapping subsets of the data.
+- If you choose to merge the points created in the last step, only run this 
+script once over the entire range of the data. This script does not
+currently work on a series of non-overlapping subsets of the data.
 
-	- Important: You must specify the same filepath for output_folder in this 
-	step as you did in the previous two.
+- Important: You must specify the same filepath for output_folder in this 
+step as you did in the previous two.
 
 Known Issues/Limitations
 ------------------------
