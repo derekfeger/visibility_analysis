@@ -307,6 +307,14 @@ shapefile. Until this can be optimized for better speed, don't use this tool
 unless you need some functionality that you can only get by producing a 
 shapefile with the visibility calculations baked into the attribute table. 
 
+8. The application of offset values in va_analysis is not smart and will apply
+the same value to every record in the dataset. This rarely happens in real life,
+although it may happen in your project. You can fix this by adjusting the code
+at that section to apply a different offset value depending on an SQL query,
+or you might fix it by manually editing the table and entering in the proper 
+offset distances yourself. If you do this, be sure to comment out all of the 
+lines in the for loop related to offsets. 
+
 
 
 License and Contribution
