@@ -19,7 +19,7 @@ test the visibility of a series of points. The user inputs a shapefile
 containing the points of interest, a digital elevation model (DEM) or 
 terrain dataset, and a radius defining the area of analysis around each point.
 This process will then sequentially calculate the percentage of visible pixels
-within the analysis area and output the results to a table. Additonal outputs 
+within the analysis area and output the results to a table. Additional outputs 
 include a shapefile representing the areas of analysis, a viewshed raster for 
 each point, and an optional shapefile of all the input points with an updated
 attribute table reflecting the results of the analysis. 
