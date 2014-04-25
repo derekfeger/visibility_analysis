@@ -3,9 +3,9 @@ import os
 import os.path
 
 # User Inputs 
-output_directory = "E:\\independent_study\\visibility_analysis"
+output_directory = "E:\\independent_study\\visibility_analysis_fromdem"
 startloop = 0
-endloop = 5
+endloop = 1009
 
 # Set global variables, variables for produced files
 recordnumber = startloop

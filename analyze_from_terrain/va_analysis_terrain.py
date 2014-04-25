@@ -10,7 +10,7 @@ output_directory = "E:\\independent_study\\visibility_analysis_fromterrain"
 offseta = 30
 offsetb = 5.5
 startloop = 0
-endloop = 5
+endloop = 1009
 
 # Set local functions
 def table_prep(tablefile):
