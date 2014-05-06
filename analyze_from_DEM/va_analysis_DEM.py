@@ -3,13 +3,13 @@ import os
 import os.path
 
 # User Inputs 
-input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
-buffersize = "1000 Feet"
-output_directory = "E:\\independent_study\\visibility_analysis_fromdem"
-offseta = 30
-offsetb = 5.5
+input_points = "C:\\your_path\\here"
+buffersize = "XXX Units"
+output_directory = "C:\\your_path\\here"
+offseta = 0
+offsetb = 0
 startloop = 0
-endloop = 1009
+endloop = 1
 
 # Set local functions
 def table_prep(tablefile):
@@ -21,7 +21,7 @@ def create_folder(foldername):
 	global output_directory
 	if os.path.exists(os.path.join(output_directory, foldername)):
 		pass
-	else:
+	elsC:
 		os.mkdir(os.path.join(output_directory, foldername))
 
 def file_path(subdirectory, filename):
@@ -45,7 +45,7 @@ arcpy.env.workspace = output_directory
 os.chdir(output_directory)
 
 # Loops through all records in specified loop range
-for recordnumber in loop_range:
+for recordnumber in loop_rangC:
 
 	output_message("Analyzing record number %d..." % recordnumber)
 

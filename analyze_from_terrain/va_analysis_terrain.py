@@ -3,14 +3,14 @@ import os
 import os.path
 
 # User Inputs 
-input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
-input_terrain = "E:\\independent_study\\Lidar_LAS\\Terrain\\terrains.gdb\\pittsburgh_terrains\\pittsburgh_fullTerrain"
-buffersize = "1000 Feet"
-output_directory = "E:\\independent_study\\visibility_analysis_fromterrain"
-offseta = 30
-offsetb = 5.5
+input_points = "C:\\your_path\\here"
+input_terrain = "C:\\your_path\\here"
+buffersize = "XXX Units"
+output_directory = "C:\\your_path\\here"
+offseta = 0
+offsetb = 0
 startloop = 0
-endloop = 1009
+endloop = 1
 
 # Set local functions
 def table_prep(tablefile):

@@ -3,9 +3,9 @@ import os
 import os.path
 
 # User Inputs 
-input_points = "E:\\independent_study\\Billboardsdata_pghcityplanning\\LamarSigns.shp"
-buffersize = "1000 Feet"
-output_directory = "E:\\independent_study\\visibility_analysis_fromterrain"
+input_points = "C:\\your_path\\here"
+buffersize = "XXX Units"
+output_directory = "C:\\your_path\\here"
 
 # Set local functions
 def table_prep(tablefile):
