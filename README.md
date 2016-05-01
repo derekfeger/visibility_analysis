@@ -24,6 +24,9 @@ include a shapefile representing the areas of analysis, a viewshed raster for
 each point, and an optional shapefile of all the input points with an updated
 attribute table reflecting the results of the analysis. 
 
+Created in the spring of 2014 as part of my independent study in my senior 
+year at the University of Pittsburgh.
+
 Installation:
 -------------
 
